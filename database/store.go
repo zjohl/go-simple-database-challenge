@@ -1,6 +1,8 @@
 package database
 
-import "errors"
+import (
+	"errors"
+)
 
 type Store struct {
 	KeyMap map[string]string
@@ -29,4 +31,14 @@ func (s *Store) Unset(key string) (string, error) {
 	}
 	delete(s.KeyMap, key)
 	return prevValue, nil
+}
+
+func (s *Store) NumEqualTo(value string) int {
+	var count int
+	for _, val := range s.KeyMap {
+		if val == value {
+			count++
+		}
+	}
+	return count
 }

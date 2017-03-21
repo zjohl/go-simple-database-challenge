@@ -38,7 +38,6 @@ var _ = Describe("Database", func() {
 			})
 		})
 
-
 		Context("when a value does not exist for the given key", func() {
 
 			It("returns an error", func() {
@@ -85,6 +84,35 @@ var _ = Describe("Database", func() {
 			It("returns an error", func() {
 				_, err := store.Unset("a")
 				Expect(err).To(HaveOccurred())
+			})
+		})
+	})
+
+	Describe("#NumEqualTo", func() {
+		Context("when there are no stored instances of the provided value", func() {
+
+			It("returns 0", func() {
+				Expect(store.NumEqualTo("1")).To(Equal(0))
+			})
+		})
+
+		Context("when there is a stored instance of the provided value", func() {
+
+			It("returns the number of occurances of the value", func() {
+				store.Set("a", "1")
+
+				Expect(store.NumEqualTo("1")).To(Equal(1))
+			})
+		})
+
+		Context("when there are many stored instances of the provided value", func() {
+
+			It("returns the number of occurances of the value", func() {
+				store.Set("a", "1")
+				store.Set("b", "1")
+				store.Set("d", "1")
+
+				Expect(store.NumEqualTo("1")).To(Equal(3))
 			})
 		})
 	})
