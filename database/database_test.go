@@ -59,4 +59,33 @@ var _ = Describe("Database", func() {
 		})
 	})
 
+	Describe("#Unset", func() {
+		Context("when a value exists for the given key", func() {
+
+			It("unsets the key", func() {
+				store.Set("a", "1")
+				store.Unset("a")
+
+				val, err := store.Get("a")
+				Expect(val).NotTo(Equal("1"))
+				Expect(err).To(HaveOccurred())
+			})
+
+			It("returns the previous value", func() {
+				store.Set("a", "1")
+				val, err := store.Unset("a")
+
+				Expect(err).NotTo(HaveOccurred())
+				Expect(val).To(Equal("1"))
+			})
+		})
+
+		Context("when a value does not exist for the given key", func() {
+
+			It("returns an error", func() {
+				_, err := store.Unset("a")
+				Expect(err).To(HaveOccurred())
+			})
+		})
+	})
 })
