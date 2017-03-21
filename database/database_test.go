@@ -14,6 +14,7 @@ var _ = Describe("Database", func() {
 	BeforeEach(func() {
 		store = Store{
 			KeyMap: make(map[string]string),
+			OccurrencesMap: make(map[string]int),
 		}
 	})
 

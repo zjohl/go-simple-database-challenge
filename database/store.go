@@ -6,6 +6,7 @@ import (
 
 type Store struct {
 	KeyMap map[string]string
+	OccurrencesMap map[string]int
 }
 
 const NoValueErrorMessage = "no value for provided key"
@@ -13,6 +14,7 @@ const NoValueErrorMessage = "no value for provided key"
 func (s *Store) Set(key, value string) string {
 	prevValue := s.KeyMap[key]
 	s.KeyMap[key] = value
+	s.OccurrencesMap[value] = s.OccurrencesMap[value] + 1
 	return prevValue
 }
 
@@ -30,15 +32,10 @@ func (s *Store) Unset(key string) (string, error) {
 		return "", errors.New(NoValueErrorMessage)
 	}
 	delete(s.KeyMap, key)
+	s.OccurrencesMap[prevValue] = s.OccurrencesMap[prevValue] - 1
 	return prevValue, nil
 }
 
 func (s *Store) NumEqualTo(value string) int {
-	var count int
-	for _, val := range s.KeyMap {
-		if val == value {
-			count++
-		}
-	}
-	return count
+	return s.OccurrencesMap[value]
 }
