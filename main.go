@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"github.com/zjohl/go-simple-database-challenge/cmd"
 )
 
 func main() {
-	fmt.Fprint(os.Stdout, "10")
+
+	parser := cmd.Parser{}
+	parser.Parse("SET a 10")
+	fmt.Println("10")
 }

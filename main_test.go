@@ -34,10 +34,10 @@ var _ = Describe("Simple Database", func() {
 		It("executes those commands and returns the expected output", func() {
 			printFile(stdinPipe, "fixtures/data-command-1.txt")
 
+			Eventually(session).Should(Exit())
 			Expect(session.Out).To(gbytes.Say("10"))
 			Expect(session.Out).To(gbytes.Say("NULL"))
 
-			Eventually(session).Should(Exit())
 		})
 	})
 })
