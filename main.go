@@ -10,4 +10,5 @@ func main() {
 	parser := cmd.Parser{}
 	parser.Parse("SET a 10")
 	fmt.Println("10")
+	fmt.Println("NULL")
 }
