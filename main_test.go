@@ -31,12 +31,22 @@ var _ = Describe("Simple Database", func() {
 	})
 
 	Context("when given a valid set of data commands", func() {
-		It("executes those commands and returns the expected output", func() {
+		It("retrieves, sets and unsets values", func() {
 			printFile(stdinPipe, "fixtures/data-command-1.txt")
 
 			Eventually(session).Should(Exit())
 			Expect(session.Out).To(gbytes.Say("10"))
 			Expect(session.Out).To(gbytes.Say("NULL"))
+
+		})
+
+		It("calculates numequalto for values when prompted", func() {
+			printFile(stdinPipe, "fixtures/data-command-2.txt")
+
+			Eventually(session).Should(Exit())
+			Expect(session.Out).To(gbytes.Say("2"))
+			Expect(session.Out).To(gbytes.Say("0"))
+			Expect(session.Out).To(gbytes.Say("1"))
 
 		})
 	})
