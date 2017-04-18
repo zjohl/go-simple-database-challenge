@@ -4,21 +4,28 @@ import (
 	"errors"
 )
 
-type Store struct {
-	KeyMap map[string]string
+func NewStore() *store {
+	return &store{
+		KeyMap:         make(map[string]string),
+		OccurrencesMap: make(map[string]int),
+	}
+}
+
+type store struct {
+	KeyMap         map[string]string
 	OccurrencesMap map[string]int
 }
 
 const NoValueErrorMessage = "no value for provided key"
 
-func (s *Store) Set(key, value string) string {
+func (s *store) Set(key, value string) string {
 	prevValue := s.KeyMap[key]
 	s.KeyMap[key] = value
 	s.OccurrencesMap[value] = s.OccurrencesMap[value] + 1
 	return prevValue
 }
 
-func (s *Store) Get(key string) (string, error) {
+func (s *store) Get(key string) (string, error) {
 	val, ok := s.KeyMap[key]
 	if !ok {
 		return "", errors.New(NoValueErrorMessage)
@@ -26,7 +33,7 @@ func (s *Store) Get(key string) (string, error) {
 	return val, nil
 }
 
-func (s *Store) Unset(key string) (string, error) {
+func (s *store) Unset(key string) (string, error) {
 	prevValue, ok := s.KeyMap[key]
 	if !ok {
 		return "", errors.New(NoValueErrorMessage)
@@ -36,6 +43,6 @@ func (s *Store) Unset(key string) (string, error) {
 	return prevValue, nil
 }
 
-func (s *Store) NumEqualTo(value string) int {
+func (s *store) NumEqualTo(value string) int {
 	return s.OccurrencesMap[value]
 }

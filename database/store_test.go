@@ -7,12 +7,12 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Store", func() {
+var _ = Describe("store", func() {
 
-	var store Store
+	var store store
 
 	BeforeEach(func() {
-		store = Store{
+		store = store{
 			KeyMap: make(map[string]string),
 			OccurrencesMap: make(map[string]int),
 		}

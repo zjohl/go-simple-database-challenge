@@ -40,7 +40,7 @@ var _ = Describe("Simple Database", func() {
 
 		})
 
-		It("calculates numequalto for values when promted", func() {
+		It("calculates numequalto for values when prompted", func() {
 			printFile(stdinPipe, "fixtures/data-command-2.txt")
 
 			Eventually(session).Should(Exit())
