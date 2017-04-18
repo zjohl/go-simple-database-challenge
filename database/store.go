@@ -2,24 +2,35 @@ package database
 
 import (
 	"errors"
+
+	"code.cloudfoundry.org/lager"
 )
 
+func NewStore(logger lager.Logger) *Store {
+	return &Store{
+		keyMap:         make(map[string]string),
+		occurrencesMap: make(map[string]int),
+		logger:         logger,
+	}
+}
+
 type Store struct {
-	KeyMap map[string]string
-	OccurrencesMap map[string]int
+	keyMap         map[string]string
+	occurrencesMap map[string]int
+	logger         lager.Logger
 }
 
 const NoValueErrorMessage = "no value for provided key"
 
 func (s *Store) Set(key, value string) string {
-	prevValue := s.KeyMap[key]
-	s.KeyMap[key] = value
-	s.OccurrencesMap[value] = s.OccurrencesMap[value] + 1
+	prevValue := s.keyMap[key]
+	s.keyMap[key] = value
+	s.occurrencesMap[value] = s.occurrencesMap[value] + 1
 	return prevValue
 }
 
 func (s *Store) Get(key string) (string, error) {
-	val, ok := s.KeyMap[key]
+	val, ok := s.keyMap[key]
 	if !ok {
 		return "", errors.New(NoValueErrorMessage)
 	}
@@ -27,15 +38,15 @@ func (s *Store) Get(key string) (string, error) {
 }
 
 func (s *Store) Unset(key string) (string, error) {
-	prevValue, ok := s.KeyMap[key]
+	prevValue, ok := s.keyMap[key]
 	if !ok {
 		return "", errors.New(NoValueErrorMessage)
 	}
-	delete(s.KeyMap, key)
-	s.OccurrencesMap[prevValue] = s.OccurrencesMap[prevValue] - 1
+	delete(s.keyMap, key)
+	s.occurrencesMap[prevValue] = s.occurrencesMap[prevValue] - 1
 	return prevValue, nil
 }
 
 func (s *Store) NumEqualTo(value string) int {
-	return s.OccurrencesMap[value]
+	return s.occurrencesMap[value]
 }

@@ -9,13 +9,10 @@ import (
 
 var _ = Describe("Database", func() {
 
-	var store Store
+	var store *Store
 
 	BeforeEach(func() {
-		store = Store{
-			KeyMap: make(map[string]string),
-			OccurrencesMap: make(map[string]int),
-		}
+		store = NewStore(nil)
 	})
 
 	Describe("#Get", func() {
