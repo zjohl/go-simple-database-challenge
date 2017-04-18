@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Database", func() {
+var _ = Describe("Store", func() {
 
 	var store Store
 

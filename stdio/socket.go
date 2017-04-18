@@ -1,19 +1,26 @@
 package stdio
 
-import (
-	"bufio"
-	"os"
-)
+import "fmt"
 
 type Socket struct {
-	In chan string
+	In  chan string
+	Out chan string
 }
 
 func (s *Socket) BufferInput() {
 	go func() {
-		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			s.In <- scanner.Text()
+		var input string
+		for {
+			fmt.Scanln(&input)
+			s.In <- input
 		}
-	} ()
+	}()
+}
+
+func (s *Socket) BufferOutput() {
+	go func(passed chan string) {
+		for {
+			fmt.Println(<-passed)
+		}
+	}(s.Out)
 }
