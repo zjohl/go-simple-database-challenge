@@ -24,5 +24,22 @@ func NewController(stdioSocket *stdio.Socket, parser *cmd.Parser, store *databas
 }
 
 func (c *Controller) Start() {
+	c.stdioSocket.BufferInput()
+	c.stdioSocket.BufferOutput()
+	for {
+		select {
+		case input := <-c.stdioSocket.In:
+			command, err := c.parser.Parse(input)
+			if err != nil {
+				panic(err)
+			}
 
+			output, err := command.Execute()
+			if err != nil {
+				panic(err)
+			}
+
+			c.stdioSocket.Out <- output
+		}
+	}
 }
