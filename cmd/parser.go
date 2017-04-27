@@ -3,12 +3,22 @@ package cmd
 import (
 	"errors"
 	"strings"
+
+	"code.cloudfoundry.org/lager"
 )
 
-type Parser struct{}
+type Parser struct {
+	logger lager.Logger
+}
 
 type Command interface {
 	Execute() (string, error)
+}
+
+func NewParser(logger lager.Logger) *Parser {
+	return &Parser{
+		logger: logger,
+	}
 }
 
 func (p *Parser) Parse(toParse string) (Command, error) {

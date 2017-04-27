@@ -1,10 +1,23 @@
 package stdio
 
-import "fmt"
+import (
+	"fmt"
+
+	"code.cloudfoundry.org/lager"
+)
 
 type Socket struct {
-	In  chan string
-	Out chan string
+	In     chan string
+	Out    chan string
+	logger lager.Logger
+}
+
+func NewSocket(logger lager.Logger) *Socket {
+	return &Socket{
+		In:     make(chan string),
+		Out:    make(chan string),
+		logger: logger,
+	}
 }
 
 func (s *Socket) BufferInput() {
